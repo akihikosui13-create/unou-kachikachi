@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>右脳カチカチ！ マウスで右脳チェック＆トレーニング</title>
+<style>
+  :root{
+    --orange:#ff8a1f; --orange-d:#e06a00; --cream:#fff3d6; --pink:#ff5e9c;
+    --green:#4fc26b; --blue:#3f8cff; --purple:#7a4bd8; --ink:#3a2a1a; --white:#fff;
+  }
+  *{box-sizing:border-box;user-select:none;-webkit-user-select:none}
+  html,body{margin:0;height:100%;background:#2b1a0e;overflow:hidden;
+    font-family:"Hiragino Maru Gothic ProN","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;color:var(--ink)}
+  #wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  #stage{position:relative;flex:none;width:800px;height:600px;transform-origin:center center;overflow:hidden;
+    background:
+      radial-gradient(circle at 15% 20%,rgba(255,255,255,.35) 0 60px,transparent 61px),
+      radial-gradient(circle at 80% 70%,rgba(255,255,255,.25) 0 90px,transparent 91px),
+      radial-gradient(circle at 60% 15%,rgba(255,255,255,.2) 0 40px,transparent 41px),
+      radial-gradient(circle at 30% 85%,rgba(255,255,255,.2) 0 50px,transparent 51px),
+      radial-gradient(ellipse at center,rgba(255,255,255,.18),transparent 70%),
+      linear-gradient(160deg,#ffd27a 0%,#ff9a2e 55%,#ff6f14 100%);
+    border-radius:18px;box-shadow:0 0 0 6px #ffd48a,0 20px 60px rgba(0,0,0,.6)}
+  .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px 20px 26px}
+  h1.logo{margin:0;font-size:44px;line-height:1.1;text-align:center;color:#fff;white-space:nowrap;
+    text-shadow:3px 3px 0 var(--orange-d),6px 6px 0 rgba(0,0,0,.25);letter-spacing:2px}
+  h1.logo small{display:block;font-size:17px;color:#fff3d6;margin-top:6px;text-shadow:2px 2px 0 var(--orange-d)}
+  .sub{color:#fff;font-size:15px;text-shadow:1px 1px 0 var(--orange-d);text-align:center}
+  .btn{background:var(--pink);color:#fff;border:0;border-radius:40px;padding:14px 34px;font-size:22px;font-weight:bold;
+    box-shadow:0 5px 0 #b8306a,0 8px 14px rgba(0,0,0,.25);cursor:pointer;font-family:inherit;transition:transform .05s}
+  .btn:active{transform:translateY(4px);box-shadow:0 1px 0 #b8306a}
+  .btn.alt{background:var(--blue);box-shadow:0 5px 0 #235aa8,0 8px 14px rgba(0,0,0,.25)}
+  .btn.alt:active{box-shadow:0 1px 0 #235aa8}
+  .btn.small{font-size:16px;padding:8px 20px}
+  .btn.gray{background:#8a8a8a;box-shadow:0 5px 0 #555}
+  .panel{background:rgba(255,248,230,.82);backdrop-filter:blur(8px);border:4px solid rgba(255,255,255,.85);border-radius:22px;padding:18px 26px;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+  .menu{display:flex;flex-direction:column;gap:10px;width:520px}
+  .course{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.82);backdrop-filter:blur(6px);border:4px solid var(--orange);border-radius:18px;padding:8px 16px;cursor:pointer;text-align:left}
+  .course:hover{background:#fff8e8;transform:scale(1.02)}
+  .course .ic{font-size:40px;width:56px;text-align:center}
+  .course b{font-size:22px;color:var(--orange-d)}
+  .course span{display:block;font-size:14px;color:#555}
+  .row{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+
+  /* host character (nurse) */
+  .host{display:flex;align-items:flex-end;gap:14px}
+  .avatar{width:120px;height:140px;position:relative;flex:none}
+  .avatar .face{position:absolute;left:20px;top:30px;width:80px;height:90px;border-radius:40px 40px 36px 36px;background:#ffe0c4;border:3px solid #c98b62}
+  .avatar .hair{position:absolute;left:14px;top:16px;width:92px;height:52px;border-radius:46px 46px 10px 10px;background:#6b3f22}
+  .avatar.purple .hair{background:#4a2a8a}
+  .avatar .cap{position:absolute;left:34px;top:4px;width:52px;height:22px;background:#fff;border:3px solid #ff8a1f;border-radius:8px 8px 2px 2px}
+  .avatar.purple .cap{display:none}
+  .avatar .ear{position:absolute;top:2px;width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:26px solid #4a2a8a;display:none}
+  .avatar.purple .ear{display:block}
+  .avatar .ear.l{left:20px} .avatar .ear.r{left:74px}
+  .avatar .eye{position:absolute;top:70px;width:10px;height:14px;border-radius:50%;background:#2a1a10}
+  .avatar .eye.l{left:42px} .avatar .eye.r{left:70px}
+  .avatar .mouth{position:absolute;left:52px;top:96px;width:18px;height:9px;border-radius:0 0 12px 12px;background:#d9534f}
+  .avatar .body{position:absolute;left:16px;top:112px;width:88px;height:30px;border-radius:20px 20px 0 0;background:#fff;border:3px solid #ddd}
+  .avatar.purple .body{background:#3a2560;border-color:#2a1a45}
+  .bubble{background:rgba(255,255,255,.88);backdrop-filter:blur(6px);border:4px solid var(--orange);border-radius:18px;padding:14px 18px;font-size:18px;line-height:1.5;max-width:520px;position:relative}
+  .bubble:before{content:"";position:absolute;left:-18px;bottom:24px;border:9px solid transparent;border-right-color:var(--orange)}
+
+  /* HUD */
+  .hud{position:absolute;left:0;top:0;width:100%;height:58px;background:linear-gradient(rgba(255,255,255,.9),rgba(255,232,190,.85));backdrop-filter:blur(6px);border-bottom:4px solid var(--orange-d);
+    display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-weight:bold;font-size:18px;z-index:5}
+  .hud .name{color:var(--orange-d);font-size:20px}
+  .hud .cat{font-size:13px;color:#777;margin-left:6px}
+  .hud .lives{color:var(--pink);letter-spacing:2px}
+  .hud .score{color:var(--purple)}
+  .tbar{position:absolute;left:0;top:58px;width:100%;height:12px;background:#5a3b1e;z-index:5}
+  .tbar i{display:block;height:100%;background:linear-gradient(90deg,#4fc26b,#ffd54f,#ff5e5e);width:100%;transition:width .1s linear}
+  .area{position:absolute;left:0;top:70px;width:800px;height:530px;overflow:hidden}
+  .area.hard{background:radial-gradient(ellipse at bottom,#ff4d1f 0,#b0002a 60%,#3a0018 100%)}
+  .area.shard{background:radial-gradient(ellipse at bottom,#ffd54f 0,#ff3d00 50%,#3a0018 100%)}
+  .flash{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:9;pointer-events:none}
+  .flash .badge{background:var(--orange);color:#fff;font-size:56px;font-weight:bold;padding:26px 46px;border-radius:50%;
+    border:8px solid #fff;box-shadow:0 10px 30px rgba(0,0,0,.4);animation:pop .25s ease-out}
+  .flash .badge.ng{background:var(--purple)}
+  .flash .banner{background:rgba(20,10,60,.92);color:#8dff9a;font-size:46px;font-weight:bold;padding:22px 60px;border-radius:14px;
+    letter-spacing:4px;text-shadow:0 0 12px #4fc26b;animation:pop .3s ease-out}
+  @keyframes pop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+  .instr{width:100%;text-align:center;font-size:20px;font-weight:bold;color:#fff;text-shadow:2px 2px 0 rgba(0,0,0,.35);padding:10px}
+  .center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px}
+
+  /* count game */
+  .ball{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;cursor:pointer;
+    background:radial-gradient(circle at 35% 28%,rgba(255,255,255,.95) 0,rgba(255,255,255,.35) 18%,rgba(255,255,255,0) 42%),
+      radial-gradient(circle at 50% 55%,var(--c) 0,color-mix(in srgb,var(--c) 65%,#000) 100%);
+    opacity:.88;border:2px solid rgba(255,255,255,.65);
+    box-shadow:inset 0 -8px 12px rgba(0,0,0,.25),0 6px 14px rgba(0,0,0,.3);text-shadow:0 1px 2px rgba(0,0,0,.5)}
+  .ball:hover{opacity:1;transform:scale(1.06)}
+  .ball.done{opacity:.15;pointer-events:none;transform:scale(.7);transition:all .2s}
+  .ball.shake{animation:shake .3s}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+  /* cards */
+  .cardrow{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:8px 0;max-width:720px}
+  .card{width:64px;height:90px;background:linear-gradient(160deg,rgba(255,255,255,.95),rgba(235,240,255,.8));backdrop-filter:blur(4px);border:3px solid rgba(40,40,60,.7);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:40px;
+    box-shadow:0 4px 8px rgba(0,0,0,.3)}
+  .card.red{color:#e03030} .card.pick{cursor:pointer} .card.pick:hover{transform:translateY(-6px)}
+  .card.hit{border-color:var(--pink);box-shadow:0 0 0 5px var(--pink)}
+
+  /* keypad */
+  .numdisp{width:360px;height:70px;background:rgba(255,255,255,.85);backdrop-filter:blur(6px);border:4px solid rgba(40,40,60,.7);border-radius:12px;font-size:44px;letter-spacing:6px;
+    display:flex;align-items:center;justify-content:flex-end;padding:0 16px;font-family:"Menlo","Courier New",monospace}
+  .keypad{display:grid;grid-template-columns:repeat(3,80px);gap:8px}
+  .key{height:56px;background:linear-gradient(rgba(255,255,255,.95),rgba(255,236,210,.85));border:3px solid var(--orange-d);box-shadow:0 3px 0 rgba(224,106,0,.5);border-radius:12px;font-size:26px;font-weight:bold;cursor:pointer;font-family:inherit}
+  .key:active{background:#ffe1b3}
+  .key.ok{background:var(--green);color:#fff;border-color:#2c8a45}
+  .road{position:absolute;left:0;top:150px;width:100%;height:120px;background:linear-gradient(rgba(30,30,40,.85),rgba(70,70,90,.85));backdrop-filter:blur(3px);border-top:6px solid #ffd54f;border-bottom:6px solid #ffd54f}
+  .runner{position:absolute;top:22px;left:-400px;font-size:64px;font-weight:bold;color:#fff;font-family:"Menlo","Courier New",monospace;letter-spacing:4px;white-space:nowrap}
+
+  /* lookalike grid */
+  .lgrid{display:grid;gap:8px}
+  .lcell{width:64px;height:64px;background:linear-gradient(160deg,rgba(255,255,255,.95),rgba(225,236,255,.8));backdrop-filter:blur(4px);border:3px solid rgba(63,140,255,.85);box-shadow:0 4px 10px rgba(0,0,0,.18);border-radius:10px;display:flex;align-items:center;justify-content:center;
+    font-size:38px;cursor:pointer;color:#1a2a6b}
+  .lcell:hover{background:#eef4ff} .lcell.found{background:var(--green);color:#fff;border-color:#2c8a45;pointer-events:none}
+  .sample{display:inline-flex;width:56px;height:56px;background:#fff;border:3px solid var(--pink);border-radius:8px;align-items:center;justify-content:center;font-size:34px;color:#1a2a6b;vertical-align:middle;margin:0 8px}
+
+  /* dots memory */
+  .dgrid{display:grid;gap:10px}
+  .dot{border-radius:50%;cursor:pointer;transition:background .2s;opacity:.9;border:2px solid rgba(255,255,255,.55);
+    background:radial-gradient(circle at 35% 28%,rgba(255,255,255,.95) 0,rgba(255,255,255,.3) 20%,rgba(255,255,255,0) 45%),
+      radial-gradient(circle at 50% 55%,var(--c) 0,color-mix(in srgb,var(--c) 65%,#000) 100%);
+    box-shadow:inset 0 -6px 10px rgba(0,0,0,.25),0 5px 12px rgba(0,0,0,.3)}
+  .dot.white{background:#fff !important;box-shadow:0 0 18px #fff,inset -4px -6px 0 rgba(0,0,0,.08)}
+  .dot.hit{outline:5px solid #fff;outline-offset:2px}
+
+  /* shape */
+  canvas.shape{background:rgba(255,255,255,.9);border:4px solid rgba(40,40,60,.7);border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+  canvas.shape.pick{cursor:crosshair}
+
+  /* result */
+  .sheet{background:rgba(255,255,255,.93);border-radius:12px;padding:16px 22px;width:620px;box-shadow:0 10px 30px rgba(0,0,0,.35);
+    background-image:repeating-linear-gradient(0deg,transparent 0 28px,#f1e6d0 28px 29px)}
+  .sheet h2{margin:0 0 10px;text-align:center;color:var(--orange-d);font-size:22px;letter-spacing:4px;border-bottom:3px dashed var(--orange);padding-bottom:6px}
+  .srow{display:flex;align-items:center;gap:10px;font-size:15px;height:28px;white-space:nowrap}
+  .srow .n{width:230px;overflow:hidden;text-overflow:ellipsis} .srow .bar{flex:1;height:14px;background:#eee;border-radius:7px;overflow:hidden}
+  .srow .bar i{display:block;height:100%;background:linear-gradient(90deg,#4fc26b,#ffd54f)}
+  .srow .v{width:110px;text-align:right;font-family:Menlo,monospace}
+  .big{font-size:64px;font-weight:bold;color:var(--purple);text-align:center;line-height:1}
+  .drum{width:200px;height:120px;background:#222;border:8px solid #ffd54f;border-radius:16px;display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:70px;font-weight:bold;font-family:Menlo,monospace;box-shadow:inset 0 0 30px #000,0 10px 30px rgba(0,0,0,.5)}
+  .drum.sss{color:#ffd54f;text-shadow:0 0 20px #ffd54f;animation:pop .5s}
+  .crystal{width:150px;height:150px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#9fe0ff 30%,#4a3aa8 100%);
+    display:flex;align-items:center;justify-content:center;font-size:56px;font-weight:bold;color:#fff;text-shadow:0 0 12px #fff;box-shadow:0 0 40px #9fe0ff}
+  table.rank{border-collapse:collapse;font-size:17px;background:#fff;border-radius:10px;overflow:hidden}
+  table.rank td,table.rank th{padding:5px 14px;border-bottom:1px solid #eee;text-align:left}
+  table.rank th{background:var(--orange);color:#fff}
+  input.name{font-size:26px;padding:8px 14px;border:3px solid var(--orange-d);border-radius:10px;width:260px;font-family:inherit;text-align:center}
+  .games{display:grid;grid-template-columns:repeat(3,200px);gap:14px}
+  .gtile{background:rgba(255,255,255,.85);backdrop-filter:blur(6px);border:4px solid var(--blue);box-shadow:0 6px 14px rgba(0,0,0,.2);border-radius:16px;padding:10px;cursor:pointer;text-align:center}
+  .gtile:hover{background:#eef4ff;transform:scale(1.03)}
+  .gtile .ic{font-size:40px} .gtile b{display:block;font-size:17px;color:#1a2a6b} .gtile span{font-size:12px;color:#666}
+  .gtile small{display:block;font-size:12px;color:var(--purple);margin-top:4px}
+  .foot{position:absolute;bottom:8px;width:100%;text-align:center;font-size:11px;color:#fff;opacity:.8}
+</style>
+</head>
+<body>
+<div id="wrap"><div id="stage"></div></div>
+<script>
+'use strict';
+/* ========= utilities ========= */
+const stage = document.getElementById('stage');
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const rnd = n => Math.floor(Math.random() * n);
+const pick = a => a[rnd(a.length)];
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
+const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function fit() { const s = Math.min(innerWidth / 800, innerHeight / 600, 1.6); stage.style.transform = `scale(${s})`; }
+addEventListener('resize', fit); fit();
+
+/* ========= sound (tiny synth, no assets) ========= */
+const SND = { on: true, ctx: null,
+  beep(f, d = .08, type = 'square', g = .06, t0 = 0) {
+    if (!this.on) return; try { this.ctx = this.ctx || new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return; }
+    const c = this.ctx, o = c.createOscillator(), a = c.createGain(); o.type = type; o.frequency.value = f;
+    a.gain.setValueAtTime(g, c.currentTime + t0); a.gain.exponentialRampToValueAtTime(.001, c.currentTime + t0 + d);
+    o.connect(a); a.connect(c.destination); o.start(c.currentTime + t0); o.stop(c.currentTime + t0 + d + .02);
+  },
+  tap() { this.beep(880, .05); }, ok() { this.beep(1040, .09); this.beep(1560, .14, 'square', .06, .09); },
+  ng() { this.beep(160, .25, 'sawtooth', .07); }, fanfare() { [523, 659, 784, 1046].forEach((f, i) => this.beep(f, .18, 'triangle', .08, i * .12)); },
+  drum() { this.beep(300, .04, 'square', .04); }
+};
+
+/* ========= storage ========= */
+const DB = {
+  key: 'unou-kachikachi-v1',
+  load() { try { return JSON.parse(localStorage.getItem(this.key)) || {}; } catch (e) { return {}; } },
+  save(d) { try { localStorage.setItem(this.key, JSON.stringify(d)); } catch (e) { } },
+  get checks() { return this.load().checks || []; },
+  addCheck(r) { const d = this.load(); d.checks = (d.checks || []).concat([r]).slice(-200); this.save(d); },
+  ranking(id) { return (this.load().rank || {})[id] || []; },
+  addRank(id, entry) { const d = this.load(); d.rank = d.rank || {}; const list = (d.rank[id] || []).concat([entry]).sort((a, b) => b.score - a.score).slice(0, 10); d.rank[id] = list; this.save(d); return list.indexOf(entry) + 1; }
+};
+
+/* ========= screens ========= */
+function screen(html) { stage.innerHTML = `<div class="screen">${html}</div>`; return stage.firstElementChild; }
+function avatar(kind = '') { return `<div class="avatar ${kind}"><div class="ear l"></div><div class="ear r"></div><div class="hair"></div><div class="cap"></div><div class="face"></div><div class="eye l"></div><div class="eye r"></div><div class="mouth"></div><div class="body"></div></div>`; }
+function host(text, kind = '') { return `<div class="host">${avatar(kind)}<div class="bubble">${text}</div></div>`; }
+function waitClick(sel) { return new Promise(r => { const b = stage.querySelector(sel); b.onclick = () => { SND.tap(); r(); }; }); }
+
+async function flash(text, kind = 'ok', ms = 750) {
+  const f = el('div', 'flash', kind === 'banner' ? `<div class="banner">${text}</div>` : `<div class="badge ${kind === 'ng' ? 'ng' : ''}">${text}</div>`);
+  stage.appendChild(f); if (kind === 'ok') SND.ok(); else if (kind === 'ng') SND.ng(); else SND.fanfare();
+  await sleep(ms); f.remove();
+}
+
+/* HUD + timer used by every round */
+class Hud {
+  constructor(game, mode) {
+    stage.innerHTML = '';
+    this.bar = el('div', 'hud', `<div><span class="name">${game.icon} ${game.name}</span><span class="cat">${game.cat}</span></div><div class="mid"></div><div class="right"></div>`);
+    this.tbar = el('div', 'tbar', '<i></i>'); this.area = el('div', 'area');
+    stage.append(this.bar, this.tbar, this.area);
+    this.mid = this.bar.querySelector('.mid'); this.right = this.bar.querySelector('.right'); this.info = '';
+  }
+  set(mid, right = '') { this.mid.innerHTML = mid; this.right.innerHTML = right + (right && this.info ? '　' : '') + this.info; }
+  /* countdown; returns controller */
+  timer(limit, onExpire) {
+    const fill = this.tbar.firstElementChild; let start = performance.now(), penalty = 0, stopped = false, raf;
+    const tick = () => { if (stopped) return; const rem = Math.max(0, limit - (performance.now() - start) - penalty); fill.style.width = (rem / limit * 100) + '%'; if (rem <= 0) { stopped = true; onExpire(); return; } raf = requestAnimationFrame(tick); };
+    fill.style.width = '100%'; raf = requestAnimationFrame(tick);
+    return { stop() { stopped = true; cancelAnimationFrame(raf); }, remaining() { return Math.max(0, limit - (performance.now() - start) - penalty); }, penalty(ms) { penalty += ms; fill.style.background = '#ff5e5e'; setTimeout(() => fill.style.background = '', 150); }, pause(ms) { start += ms; } };
+  }
+  /* one timer for the whole training run (used by games with totalTime) */
+  startShared(total) { this.timeUp = false; this.shared = this.timer(total, () => { this.timeUp = true; if (this.curFinish) this.curFinish(false, 0); }); }
+  /* standard round wrapper: resolves {correct, points} ; finish(ok, partialPoints).
+     With a shared timer, `limit` is only the reference time for the speed bonus. */
+  round(limit, setup) {
+    return new Promise(res => {
+      let done = false; const t0 = performance.now();
+      const t = this.shared || this.timer(limit, () => finish(false, 0));
+      const finish = (ok, partial = 0) => { if (done) return; done = true; this.curFinish = null; if (!this.shared) t.stop();
+        const rem = this.shared ? Math.max(0, limit - (performance.now() - t0)) : t.remaining();
+        res({ correct: ok, points: ok ? 100 + Math.round(100 * rem / limit) : partial }); };
+      if (this.shared) this.curFinish = finish;
+      setup(finish, t);
+    });
+  }
+}
+
+/* ========= mini games =========
+   Each game: round(hud, level) -> Promise<{correct, points(0..200)}> ; checkLevels = levels used in the check course */
+const PAL = ['#e53935', '#8e24aa', '#3949ab', '#039be5', '#00897b', '#7cb342', '#fdd835', '#fb8c00', '#6d4c41', '#d81b60', '#00acc1', '#c0ca33', '#5e35b1', '#f4511e'];
+
+const GAMES = [
+  /* 1. count 1..N  (training: one total timer for the whole run, 2 skips re-shuffle the board) */
+  { id: 'count', icon: '🔢', name: 'カウントマニア', cat: '集中力', checkLevels: [2], totalTime: 270000, skips: 2,
+    how: ['1から順番に数字のボールをタッチしてね。', 'まちがえるとタイムロス。トレーニングでは持ち時間270秒で何レベル進めるか！スキップ（2回）で配置をかえられます。'],
+    round(hud, level) {
+      const N = Math.min(50, 20 + 5 * level), limit = N * 1100, W = 800, H = 480;
+      let next = 1;
+      const label = () => hud.set(`つぎは <b style="color:#e06a00">${next}</b>`, `${N}まで`);
+      return hud.round(limit, (finish, t) => {
+        const layout = () => {
+          hud.area.querySelectorAll('.ball').forEach(e => e.remove());
+          const balls = [];
+          for (let n = next; n <= N; n++) {
+            const r = 22 + rnd(18); let x, y, ok = false;
+            for (let k = 0; k < 400 && !ok; k++) { x = r + rnd(W - 2 * r); y = r + rnd(H - 2 * r); ok = balls.every(b => Math.hypot(b.x - x, b.y - y) > b.r + r + 4); }
+            balls.push({ n, r, x, y });
+          }
+          balls.forEach(b => {
+            const d = el('div', 'ball', b.n); d.style.cssText = `left:${b.x - b.r}px;top:${b.y - b.r}px;width:${b.r * 2}px;height:${b.r * 2}px;font-size:${b.r * .9}px;--c:${PAL[b.n % PAL.length]}`;
+            d.onclick = () => {
+              if (b.n === next) { SND.tap(); d.classList.add('done'); next++; label(); if (next > N) finish(true); }
+              else { SND.ng(); d.classList.remove('shake'); void d.offsetWidth; d.classList.add('shake'); t.penalty(1000); }
+            };
+            hud.area.appendChild(d);
+          });
+        };
+        label(); layout();
+        if (hud.skips != null) {
+          const sk = el('button', 'btn small alt', `スキップ（のこり ${hud.skips}）`); sk.style.cssText = 'position:absolute;right:12px;bottom:8px;z-index:4';
+          sk.onclick = () => { if (hud.skips <= 0) return; hud.skips--; SND.tap(); sk.textContent = `スキップ（のこり ${hud.skips}）`; if (hud.skips === 0) sk.classList.add('gray'); layout(); };
+          if (hud.skips === 0) sk.classList.add('gray'); hud.area.appendChild(sk);
+        }
+      }).then(r => { if (!r.correct) r.points = Math.round(80 * ((next - 1) / N)); return r; }); // partial credit on time up
+    } },
+
+  /* 2. compare two rows of cards */
+  { id: 'cards', icon: '🃏', name: 'カードみくらべ', cat: '判断力', checkLevels: [1, 2, 3, 4, 5],
+    how: ['上と下のカードをみくらべてね。', '1枚だけちがう「下のカード」をタッチ！'],
+    round(hud, level) {
+      const SYMS = ['♠', '♣', '♥', '♦', '★', '☆', '●', '○', '■', '□', '▲', '△', '♪', '☀', '☂', '✿', '◆', '◇'];
+      const k = Math.min(16, 5 + level), limit = 7000;
+      const top = shuffle(SYMS).slice(0, k), bottom = top.slice(), idx = rnd(k);
+      const LOOK = { '●': '○', '○': '●', '■': '□', '□': '■', '▲': '△', '△': '▲', '★': '☆', '☆': '★', '◆': '◇', '◇': '◆', '♥': '♦', '♦': '♥', '♠': '♣', '♣': '♠' };
+      const others = SYMS.filter(s => !top.includes(s)); const twin = LOOK[top[idx]]; bottom[idx] = twin && !top.includes(twin) ? twin : pick(others);
+      hud.set('ちがうカードは？', '');
+      return hud.round(limit, finish => {
+        const wrap = el('div', 'center');
+        const row = arr => { const r = el('div', 'cardrow'); arr.forEach(s => r.appendChild(el('div', 'card' + ('♥♦'.includes(s) ? ' red' : ''), s))); return r; };
+        const t = row(top), b = row(bottom); [...b.children].forEach((c, i) => { c.classList.add('pick'); c.onclick = () => { c.classList.add('hit'); finish(i === idx); }; });
+        wrap.append(el('div', 'instr', '上'), t, el('div', 'instr', '下（1枚だけちがう）'), b); hud.area.appendChild(wrap);
+      });
+    } },
+
+  /* 3. find the piece with the same shape (sample may be rotated from level 2; training uses one total timer) */
+  { id: 'shape', icon: '🧩', name: 'カタチさがし', cat: '分析・推理力', checkLevels: [1, 2, 3, 4, 5], totalTime: 120000,
+    how: ['右の見本と同じカタチのピースを左の図の中から探してタッチ！', '見本は回転していることがあります。トレーニングでは持ち時間120秒。'],
+    round(hud, level) {
+      const C = 10, R = 7, S = 40, NREG = Math.min(20, 8 + level), limit = 12000, rot = level >= 2 ? rnd(4) : 0;
+      const norm = cells => { const mx = Math.min(...cells.map(c => c[0])), my = Math.min(...cells.map(c => c[1])); return cells.map(c => (c[0] - mx) + ',' + (c[1] - my)).sort().join(';'); };
+      const rotate = cells => cells.map(([x, y]) => [-y, x]);
+      const allRots = cells => { const out = []; let c = cells; for (let k = 0; k < 4; k++) { out.push(norm(c)); c = rotate(c); } return out; };
+      let reg, target, cellsOf;
+      for (let attempt = 0; attempt < 40; attempt++) {
+        reg = new Array(C * R).fill(-1); const seeds = shuffle([...Array(C * R).keys()]).slice(0, NREG); seeds.forEach((c, i) => reg[c] = i);
+        let left = C * R - NREG;
+        while (left > 0) {
+          const i = rnd(NREG); const cells = reg.map((v, j) => v === i ? j : -1).filter(j => j >= 0);
+          const cand = []; cells.forEach(j => { const x = j % C, y = (j / C) | 0; [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dx, dy]) => { const nx = x + dx, ny = y + dy; if (nx >= 0 && ny >= 0 && nx < C && ny < R && reg[ny * C + nx] < 0) cand.push(ny * C + nx); }); });
+          if (cand.length) { reg[pick(cand)] = i; left--; }
+        }
+        cellsOf = i => reg.map((v, j) => v === i ? [j % C, (j / C) | 0] : null).filter(Boolean);
+        const rots = [...Array(NREG).keys()].map(i => allRots(cellsOf(i)));
+        // target must be unique even when other pieces are rotated, and have at least 3 cells
+        const uniq = [...Array(NREG).keys()].filter(i => cellsOf(i).length >= 3 && rots.every((r, k) => k === i || !r.includes(rots[i][0])));
+        if (uniq.length) { target = pick(uniq); break; }
+      }
+      if (target == null) target = 0;
+      hud.set('見本と同じカタチはどれ？' + (rot ? '（見本は回転しています）' : ''), '');
+      return hud.round(limit, finish => {
+        const wrap = el('div', 'center'); const row = el('div', 'row'); row.style.gap = '30px';
+        const cv = el('canvas', 'shape pick'); cv.width = C * S; cv.height = R * S; const g = cv.getContext('2d');
+        g.globalAlpha = .85; for (let j = 0; j < C * R; j++) { const x = j % C, y = (j / C) | 0; g.fillStyle = PAL[reg[j] % PAL.length]; g.fillRect(x * S, y * S, S, S); }
+        g.globalAlpha = 1; const gl = g.createLinearGradient(0, 0, 0, R * S); gl.addColorStop(0, 'rgba(255,255,255,.35)'); gl.addColorStop(.5, 'rgba(255,255,255,0)'); gl.addColorStop(1, 'rgba(0,0,0,.15)'); g.fillStyle = gl; g.fillRect(0, 0, C * S, R * S);
+        g.strokeStyle = '#fff'; g.lineWidth = 3;
+        for (let j = 0; j < C * R; j++) { const x = j % C, y = (j / C) | 0; if (x < C - 1 && reg[j] !== reg[j + 1]) { g.beginPath(); g.moveTo((x + 1) * S, y * S); g.lineTo((x + 1) * S, (y + 1) * S); g.stroke(); } if (y < R - 1 && reg[j] !== reg[j + C]) { g.beginPath(); g.moveTo(x * S, (y + 1) * S); g.lineTo((x + 1) * S, (y + 1) * S); g.stroke(); } }
+        let cells = cellsOf(target); for (let k = 0; k < rot; k++) cells = rotate(cells);
+        const mx = Math.min(...cells.map(c => c[0])), my = Math.min(...cells.map(c => c[1])), Mx = Math.max(...cells.map(c => c[0])), My = Math.max(...cells.map(c => c[1]));
+        const sv = el('canvas', 'shape'); sv.width = 7 * S; sv.height = 7 * S; const h = sv.getContext('2d');
+        const ox = ((7 - (Mx - mx + 1)) / 2) | 0, oy = ((7 - (My - my + 1)) / 2) | 0; h.fillStyle = '#666';
+        cells.forEach(c => h.fillRect((c[0] - mx + ox) * S + 1, (c[1] - my + oy) * S + 1, S - 2, S - 2));
+        cv.onclick = e => { const rc = cv.getBoundingClientRect(); const sc = rc.width / cv.width; const x = ((e.clientX - rc.left) / sc / S) | 0, y = ((e.clientY - rc.top) / sc / S) | 0; finish(reg[y * C + x] === target); };
+        const lab = el('div', 'instr', '見本'); lab.style.width = 'auto';
+        const right = el('div', ''); right.style.textAlign = 'center'; right.append(lab, sv);
+        row.append(cv, right); wrap.appendChild(row); hud.area.appendChild(wrap);
+      });
+    } },
+
+  /* 4. read the number that zooms past, then type it */
+  { id: 'gyun', icon: '🚀', name: 'ギュンとナンバー', cat: '反射・直感力', checkLevels: [1, 2, 3, 4, 5],
+    how: ['一瞬だけ表示される数字を読みとって、', 'キーパッドで入力→OKをタッチ！レベルが上がるほど一瞬に。'],
+    async round(hud, level) {
+      // 10 steps: Lv1 = 3 digits / 450ms ... Lv10 = 6 digits / 120ms (Lv11+ stays at the hardest)
+      const st = Math.min(10, level) - 1, D = 3 + Math.floor(st * 3 / 9), speed = 150 + 60 * st, dur = Math.round(450 - st * 330 / 9), limit = 9000;
+      let num = ''; for (let i = 0; i < D; i++) num += (i === 0 ? 1 + rnd(9) : rnd(10));
+      hud.set(`時速 ${speed} km / ${D}ケタ`, '');
+      const c = el('div', 'center', `<div class="instr" style="font-size:40px">時速 ${speed} km<br><span style="font-size:26px">${D}ケタ</span></div>`); hud.area.appendChild(c);
+      await sleep(1100); c.innerHTML = '<div class="instr" style="font-size:48px;color:#ffd54f">レディー…</div>'; await sleep(700); c.remove();
+      // slide in fast, hold still for a moment (readable at any refresh rate), then slide out
+      const road = el('div', 'road'); const run = el('div', 'runner', num); road.appendChild(run); hud.area.appendChild(road);
+      const slide = (from, to, ms) => new Promise(r => { const t0 = performance.now(); const step = () => { const p = Math.min(1, (performance.now() - t0) / ms); run.style.left = (from + (to - from) * p) + 'px'; if (p < 1) requestAnimationFrame(step); else r(); }; requestAnimationFrame(step); });
+      const centre = 400 - run.offsetWidth / 2;
+      await slide(-500, centre, 160); await sleep(dur); await slide(centre, 1000, 160);
+      road.remove();
+      return hud.round(limit, finish => {
+        let inp = ''; const wrap = el('div', 'center'); const disp = el('div', 'numdisp', '&nbsp;'); const pad = el('div', 'keypad');
+        const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '←', '0', 'OK'];
+        keys.forEach(k => { const b = el('button', 'key' + (k === 'OK' ? ' ok' : ''), k); b.onclick = () => { SND.tap(); if (k === 'OK') { if (inp) finish(inp === num); } else if (k === '←') inp = inp.slice(0, -1); else if (inp.length < 6) inp += k; disp.textContent = inp || ' '; }; pad.appendChild(b); });
+        wrap.append(el('div', 'instr', '見えた数字を入力してOK'), disp, pad); hud.area.appendChild(wrap);
+      });
+    } },
+
+  /* 5. look-alike characters */
+  { id: 'chars', icon: '🔍', name: 'そっくり文字', cat: '集中力', checkLevels: [1, 2, 3, 4, 5],
+    how: ['そっくりな文字のなかから、見本と', '「おなじ文字」をぜんぶタッチ！ちがう文字はタッチしないでね。'],
+    round(hud, level) {
+      const SETS = [['巳', '已', '己'], ['千', '干', '于'], ['土', '士'], ['末', '未'], ['日', '曰'], ['人', '入'], ['刀', '刃'], ['大', '太', '犬'], ['王', '玉', '主'], ['鳥', '烏'], ['ソ', 'ン'], ['シ', 'ツ'], ['ろ', 'る'], ['か', 'カ'], ['タ', 'ク', 'ワ'], ['b', 'd', 'p', 'q'], ['O', '0', 'Q'], ['●', '○', '◎'], ['△', '▲', '▽'], ['☆', '★'], ['芝', '芸', '芽'], ['侍', '待', '持'], ['縁', '緑', '録'], ['ぬ', 'め'], ['わ', 'ね', 'れ'], ['苗', '笛', '由'], ['隣', '憐', '燐'], ['幸', '辛'], ['右', '石'], ['句', '旬', '勾']];
+      const dims = [[4, 3], [4, 4], [5, 4], [6, 4], [6, 5], [7, 5], [8, 5], [8, 6]]; const [cols, rows] = dims[Math.min(dims.length - 1, level - 1)];
+      const nT = Math.min(4, 1 + Math.floor(level / 2)), limit = 6000 + 1200 * nT;
+      const set = pick(SETS), sample = pick(set), others = set.filter(c => c !== sample);
+      const total = cols * rows; const cells = []; for (let i = 0; i < total; i++) cells.push(pick(others)); shuffle([...Array(total).keys()]).slice(0, nT).forEach(i => cells[i] = sample);
+      let left = nT; hud.set(`<span class="sample">${sample}</span>をぜんぶタッチ（のこり ${left}）`, '');
+      return hud.round(limit, finish => {
+        const wrap = el('div', 'center'); const g = el('div', 'lgrid'); g.style.gridTemplateColumns = `repeat(${cols},64px)`;
+        cells.forEach(ch => { const d = el('div', 'lcell', ch); d.onclick = () => { if (ch === sample) { SND.tap(); d.classList.add('found'); left--; hud.set(`<span class="sample">${sample}</span>をぜんぶタッチ（のこり ${left}）`, ''); if (left === 0) finish(true); } else finish(false); }; g.appendChild(d); });
+        wrap.appendChild(g); hud.area.appendChild(wrap);
+      });
+    } },
+
+  /* 6. remember the white dots */
+  { id: 'dots', icon: '⚪', name: '白タイルきおく', cat: '記憶力', checkLevels: [1, 2, 3, 4, 5],
+    how: ['白く光るタイルの場所をおぼえてね。', '消えたら、その場所をぜんぶタッチ！まちがえるとミス。'],
+    async round(hud, level) {
+      const n = level <= 2 ? 5 : level <= 4 ? 6 : 7, K = Math.min(12, 3 + Math.ceil(level / 2)), show = Math.max(500, 1400 - 100 * level), limit = 8000;
+      const total = n * n, whites = new Set(shuffle([...Array(total).keys()]).slice(0, K));
+      hud.set(`つぎは ⚪ × ${K}個`, '');
+      const size = Math.min(70, Math.floor(430 / n) - 10);
+      const wrap = el('div', 'center'); const g = el('div', 'dgrid'); g.style.gridTemplateColumns = `repeat(${n},${size}px)`;
+      const dots = [];
+      for (let i = 0; i < total; i++) { const d = el('div', 'dot'); d.style.cssText = `width:${size}px;height:${size}px;--c:${pick(PAL)}`; g.appendChild(d); dots.push(d); }
+      wrap.appendChild(g); hud.area.appendChild(wrap);
+      const ban = el('div', 'flash', `<div class="banner">つぎは ⚪ × ${K}個</div>`); stage.appendChild(ban); await sleep(900); ban.remove();
+      whites.forEach(i => dots[i].classList.add('white')); await sleep(show); whites.forEach(i => dots[i].classList.remove('white'));
+      const go = el('div', 'flash', '<div class="badge">ゴー！</div>'); stage.appendChild(go); setTimeout(() => go.remove(), 400);
+      let left = K; hud.set(`白かった場所をタッチ（のこり ${left}）`, '');
+      return hud.round(limit, finish => { dots.forEach((d, i) => { d.onclick = () => { if (d.classList.contains('hit')) return; if (whites.has(i)) { SND.tap(); d.classList.add('hit', 'white'); left--; hud.set(`白かった場所をタッチ（のこり ${left}）`, ''); if (left === 0) finish(true); } else { d.style.background = '#222'; d.style.opacity = 1; finish(false); } }; }); });
+    } }
+];
+
+/* ========= grades ========= */
+const GRADES = [['SSS', 3700], ['SS', 3400], ['S', 3100], ['A+', 2850], ['A', 2600], ['A-', 2400], ['B+', 2200], ['B', 2000], ['B-', 1800], ['C+', 1600], ['C', 1400], ['C-', 1200], ['D+', 1000], ['D', 800], ['D-', 600], ['E', 0]];
+const gradeIdx = total => GRADES.findIndex(g => total >= g[1]);
+function deviation(total) { const xs = DB.checks.map(c => c.total); let mean = 2200, sd = 500; if (xs.length >= 3) { mean = xs.reduce((a, b) => a + b, 0) / xs.length; sd = Math.sqrt(xs.reduce((a, b) => a + (b - mean) ** 2, 0) / xs.length) || 300; } return Math.round(50 + 10 * (total - mean) / sd); }
+
+/* ========= flows ========= */
+async function title() {
+  screen(`<h1 class="logo">右脳<span style="color:#ffd54f">カチカチ</span>！<small>マウスでカチカチ、右脳チェック＆トレーニング</small></h1>
+    <div class="sub">画面をクリックするだけのかんたん操作。右脳の能力をチェックしよう！</div>
+    <div class="menu">
+      <div class="course" id="c-check"><div class="ic">🧠</div><div><b>右脳能力チェック</b><span>4つのステージで右脳能力をチェック。結果をSSS〜Eで診断します。</span></div></div>
+      <div class="course" id="c-train"><div class="ic">💪</div><div><b>トコトントレーニング</b><span>すきなゲームをひとつ選んで、ライフがなくなるまでトコトン挑戦。ランキングに登録。</span></div></div>
+      <div class="course" id="c-rec"><div class="ic">📋</div><div><b>きろくを見る</b><span>これまでのチェック結果とランキング。</span></div></div>
+    </div>
+    <div class="row"><button class="btn small gray" id="snd">音: ${SND.on ? 'ON' : 'OFF'}</button></div>
+    <div class="foot">個人用・自作。記録はこのブラウザ内（localStorage）にだけ保存されます。</div>`);
+  stage.querySelector('#snd').onclick = e => { SND.on = !SND.on; e.target.textContent = '音: ' + (SND.on ? 'ON' : 'OFF'); SND.tap(); };
+  const choice = await new Promise(r => { ['check', 'train', 'rec'].forEach(k => stage.querySelector('#c-' + k).onclick = () => { SND.tap(); r(k); }); });
+  if (choice === 'check') await checkCourse(); else if (choice === 'train') await trainingSelect(); else await records();
+  return title();
+}
+
+async function intro(game, stageNo, extra = '') {
+  screen(`<div class="instr" style="font-size:30px">${stageNo ? `ステージ ${stageNo}` : 'トレーニング'}　${game.icon} ${game.name}<span style="font-size:16px;margin-left:10px">（${game.cat}）</span></div>
+    ${host(`<b>あそびかた</b><br>${game.how.join('<br>')}${extra}`)}<button class="btn" id="go">スタート</button>`);
+  await waitClick('#go');
+}
+
+async function checkCourse() {
+  screen(host('右脳能力チェックへようこそ！<br>4つのステージで右脳の能力をチェックします。<br>正しさとスピードで点数が決まります。') + '<button class="btn" id="go">はじめる</button>');
+  await waitClick('#go');
+  const games = shuffle(GAMES).slice(0, 4); const results = [];
+  for (let i = 0; i < games.length; i++) {
+    const g = games[i]; await intro(g, i + 1);
+    const hud = new Hud(g, 'check'); let sum = 0;
+    for (let r = 0; r < g.checkLevels.length; r++) {
+      hud.area.innerHTML = ''; hud.area.className = 'area'; hud.info = `${r + 1} / ${g.checkLevels.length}`; hud.set('');
+      const res = await g.round(hud, g.checkLevels[r]); sum += res.points;
+      await flash(res.correct ? '正解！' : 'ミス…', res.correct ? 'ok' : 'ng', 650);
+    }
+    const score = Math.round(sum / (g.checkLevels.length * 200) * 1000); results.push({ id: g.id, name: g.name, cat: g.cat, score });
+    screen(`<div class="instr" style="font-size:30px">ステージ ${i + 1} 終了</div><div class="panel"><div class="big">${score}<span style="font-size:24px">点</span></div><div style="text-align:center;margin-top:8px">${g.icon} ${g.name}（${g.cat}）</div></div>${host(score >= 800 ? 'すばらしい成績です！ばっちりですね！' : score >= 500 ? 'なかなかいい調子。この調子でいきましょう！' : 'ちょっと苦手みたい。つぎでばんかいしましょう！')}<button class="btn" id="go">つぎへ</button>`);
+    await waitClick('#go');
+  }
+  const total = results.reduce((a, r) => a + r.score, 0), gi = gradeIdx(total);
+  // fortune teller predicts
+  const pred = GRADES[Math.max(0, Math.min(GRADES.length - 1, gi + pick([-1, 0, 0, 1])))][0];
+  screen(`<div class="instr" style="font-size:28px">占い師の結果予想</div>${host('ふふふ…あなたの結果、水晶玉で占ってあげるわ。', 'purple')}<div class="crystal" id="cry">?</div>`);
+  await sleep(1300); const cry = stage.querySelector('#cry'); cry.textContent = pred; SND.fanfare();
+  stage.querySelector('.bubble').innerHTML = `わたしの予想は…<b style="font-size:28px;color:#7a4bd8">${pred}</b>ってところね。<br>さて、本当の結果はどうかしら？`;
+  await sleep(600); stage.querySelector('.screen').appendChild(el('div', 'row', '<button class="btn" id="go">結果発表へ</button>')); await waitClick('#go');
+  // drum reveal
+  screen(`<div class="instr" style="font-size:34px">結果発表！</div><div class="drum" id="drum">-</div>${host('それでは、あなたの右脳能力チェック結果を発表します！')}`);
+  const drum = stage.querySelector('#drum'); const names = GRADES.map(g => g[0]);
+  let seq; if (gi === 0) { seq = names.slice(2).concat(['SSS']); } else { seq = []; for (let i = Math.max(0, gi - 3); i <= gi; i++) seq.push(names[i]); const spin = 8; for (let i = 0; i < spin; i++) seq.unshift(names[rnd(names.length)]); }
+  for (let i = 0; i < seq.length; i++) { drum.textContent = seq[i]; SND.drum(); await sleep(gi === 0 ? 220 : 90 + (i / seq.length) ** 2 * 500); }
+  if (gi === 0) { await sleep(600); drum.classList.add('sss'); }
+  drum.textContent = names[gi]; SND.fanfare(); await sleep(900);
+  const dev = deviation(total); const all = DB.checks; const rank = all.filter(c => c.total > total).length + 1;
+  DB.addCheck({ date: today(), total, grade: names[gi], stages: results });
+  const weak = results.slice().sort((a, b) => a.score - b.score)[0];
+  screen(`<div class="sheet"><h2>右脳能力チェックシート</h2>
+    ${results.map((r, i) => `<div class="srow"><div class="n">ステージ${i + 1} ${r.name}</div><div class="bar"><i style="width:${r.score / 10}%"></i></div><div class="v">${r.score}</div></div>`).join('')}
+    <div class="srow" style="margin-top:8px;font-weight:bold"><div class="n">合計</div><div class="bar"></div><div class="v">${total} / 4000</div></div>
+    <div class="row" style="margin-top:8px;gap:30px"><div><div style="font-size:13px;text-align:center">総合ランク</div><div class="big">${names[gi]}</div></div>
+      <div><div style="font-size:13px;text-align:center">右脳偏差値</div><div class="big" style="font-size:44px">${dev}</div></div>
+      <div><div style="font-size:13px;text-align:center">じぶん順位</div><div class="big" style="font-size:44px">${rank}<span style="font-size:18px">位 / ${all.length + 1}回</span></div></div></div>
+    <div style="font-size:14px;margin-top:8px;text-align:center">${weak.cat}（${weak.name}）が弱点みたい。トコトントレーニングできたえよう！</div></div>
+    <div class="row"><button class="btn" id="again">もう一度</button><button class="btn alt" id="home">タイトルへ</button></div>`);
+  const c = await new Promise(r => { stage.querySelector('#again').onclick = () => r('again'); stage.querySelector('#home').onclick = () => r('home'); });
+  if (c === 'again') return checkCourse();
+}
+
+async function trainingSelect() {
+  screen(`<div class="instr" style="font-size:28px">トコトントレーニング　あそびたいゲームを選んでね</div><div class="games">${GAMES.map(g => { const top = DB.ranking(g.id)[0]; return `<div class="gtile" data-id="${g.id}"><div class="ic">${g.icon}</div><b>${g.name}</b><span>${g.cat}</span><small>${top ? `1位 ${esc(top.name)} ${top.score}点` : 'まだ記録なし'}</small></div>`; }).join('')}</div><button class="btn alt small" id="back">タイトルへ</button>`);
+  const id = await new Promise(r => { stage.querySelectorAll('.gtile').forEach(t => t.onclick = () => { SND.tap(); r(t.dataset.id); }); stage.querySelector('#back').onclick = () => r(null); });
+  if (!id) return; await training(GAMES.find(g => g.id === id));
+}
+
+async function training(game) {
+  await intro(game, 0, '<br><span style="font-size:14px;color:#777">ライフは3つ。まちがいや時間切れでライフが1つ減ります。レベルが上がるほど難しくなります。</span>');
+  let level = 1, lives = 3, score = 0; const hud = new Hud(game, 'train');
+  if (game.totalTime) hud.startShared(game.totalTime);
+  if (game.skips) hud.skips = game.skips;
+  while (lives > 0 && !hud.timeUp) {
+    hud.area.innerHTML = ''; hud.area.className = 'area' + (level >= 11 ? ' shard' : level >= 6 ? ' hard' : '');
+    hud.info = `Lv.${level}　<span class="lives">${'♥'.repeat(lives)}${'♡'.repeat(3 - lives)}</span>　<span class="score">${score}点</span>`; hud.set('');
+    if (level === 6 || level === 11) { await flash(level === 6 ? '🔥 ハードコース突入！' : '🔥🔥 スーパーハードコース！！', 'banner', 1400); }
+    const res = await game.round(hud, level);
+    if (res.correct) { score += res.points * level; level++; await flash(`レベル ${level - 1} クリア！`, 'ok', 700); }
+    else if (hud.timeUp) { score += res.points; await flash('タイムアップ！', 'ng', 900); }
+    else { lives--; score += res.points; await flash(lives ? 'ミス…' : 'トレーニング終了', 'ng', 800); }
+  }
+  if (hud.shared) hud.shared.stop();
+  const list = DB.ranking(game.id); const isTop = score > 0 && (list.length < 10 || score > list[list.length - 1].score);
+  screen(`<div class="instr" style="font-size:30px">トレーニング終了　おつかれさまでした</div><div class="panel" style="text-align:center"><div class="big">${score}<span style="font-size:24px">点</span></div><div>${game.icon} ${game.name}　到達レベル ${level}</div></div>
+    ${isTop ? `${host('ランキング入りです！なまえを入れてね（8文字まで）')}<div class="row"><input class="name" id="nm" maxlength="8" placeholder="なまえ" autocomplete="off"><button class="btn" id="ok">登録</button></div>` : `${host('おしい！ランキング入りはならず…またチャレンジしてね。')}<button class="btn" id="ok">つぎへ</button>`}`);
+  const inp = stage.querySelector('#nm'); if (inp) { inp.focus(); inp.onkeydown = e => { if (e.key === 'Enter') stage.querySelector('#ok').click(); }; }
+  await waitClick('#ok');
+  if (isTop) { const entry = { name: (inp.value.trim() || 'ななし').slice(0, 8), score, level, date: today() }; DB.addRank(game.id, entry); }
+  await rankingScreen(game);
+}
+
+async function rankingScreen(game) {
+  const list = DB.ranking(game.id);
+  screen(`<div class="instr" style="font-size:28px">${game.icon} ${game.name}　ランキング</div><table class="rank"><tr><th>順位</th><th>なまえ</th><th>点数</th><th>レベル</th><th>日付</th></tr>${list.map((e, i) => `<tr><td>${i + 1}</td><td>${esc(e.name)}</td><td>${e.score}</td><td>${e.level}</td><td>${e.date}</td></tr>`).join('') || '<tr><td colspan="5">まだ記録がありません</td></tr>'}</table>
+    <div class="row"><button class="btn" id="again">もう一度</button><button class="btn alt" id="home">ゲーム選択へ</button></div>`);
+  const c = await new Promise(r => { stage.querySelector('#again').onclick = () => r('again'); stage.querySelector('#home').onclick = () => r('home'); });
+  if (c === 'again') return training(game);
+  return trainingSelect();
+}
+
+async function records() {
+  const cs = DB.checks.slice().reverse().slice(0, 10);
+  screen(`<div class="instr" style="font-size:28px">きろく</div><div class="row" style="align-items:flex-start;gap:24px">
+    <div><div class="instr" style="font-size:18px">右脳能力チェック（最近10回）</div><table class="rank"><tr><th>日付</th><th>合計</th><th>ランク</th></tr>${cs.map(c => `<tr><td>${c.date}</td><td>${c.total}</td><td>${c.grade}</td></tr>`).join('') || '<tr><td colspan="3">まだ記録がありません</td></tr>'}</table></div>
+    <div><div class="instr" style="font-size:18px">トレーニング1位</div><table class="rank"><tr><th>ゲーム</th><th>なまえ</th><th>点数</th></tr>${GAMES.map(g => { const t = DB.ranking(g.id)[0]; return `<tr><td>${g.name}</td><td>${t ? esc(t.name) : '-'}</td><td>${t ? t.score : '-'}</td></tr>`; }).join('')}</table></div></div>
+    <div class="row"><button class="btn alt" id="home">タイトルへ</button><button class="btn small gray" id="clear">記録を全部消す</button></div>`);
+  await new Promise(r => { stage.querySelector('#home').onclick = r; stage.querySelector('#clear').onclick = () => { if (confirm('保存した記録をすべて消します。よろしいですか？')) { DB.save({}); r(); } }; });
+}
+
+title();
+</script>
+</body>
+</html>
