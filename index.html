@@ -169,6 +169,7 @@
   .gtile:hover{background:#eef4ff;transform:scale(1.03)}
   .gtile .ic{font-size:40px} .gtile b{display:block;font-size:17px;color:#1a2a6b} .gtile span{font-size:12px;color:#666}
   .gtile small{display:block;font-size:12px;color:var(--purple);margin-top:4px}
+  .confirm-overlay{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:rgba(20,10,0,.55)}
   .foot{position:absolute;bottom:8px;width:100%;text-align:center;font-size:11px;color:#fff;opacity:.8}
 </style>
 </head>
@@ -217,6 +218,15 @@ function screen(html) { stage.innerHTML = `<div class="screen">${html}</div>`; r
 function avatar(kind = '') { return `<div class="avatar ${kind}"><div class="ear l"></div><div class="ear r"></div><div class="hair"></div><div class="cap"></div><div class="face"></div><div class="eye l"></div><div class="eye r"></div><div class="mouth"></div><div class="body"></div></div>`; }
 function host(text, kind = '') { return `<div class="host">${avatar(kind)}<div class="bubble">${text}</div></div>`; }
 function waitClick(sel) { return new Promise(r => { const b = stage.querySelector(sel); b.onclick = () => { SND.tap(); r(); }; }); }
+function confirmDialog(message) {
+  return new Promise(res => {
+    const ov = el('div', 'confirm-overlay');
+    ov.innerHTML = `<div class="panel" style="max-width:360px;text-align:center"><div style="margin-bottom:16px;font-size:16px;line-height:1.5">${esc(message)}</div><div class="row"><button class="btn small" id="cd-yes">はい</button><button class="btn small gray" id="cd-no">いいえ</button></div></div>`;
+    stage.appendChild(ov);
+    ov.querySelector('#cd-yes').onclick = () => { SND.tap(); ov.remove(); res(true); };
+    ov.querySelector('#cd-no').onclick = () => { SND.tap(); ov.remove(); res(false); };
+  });
+}
 
 async function flash(text, kind = 'ok', ms = 750) {
   const f = el('div', 'flash', kind === 'banner' ? `<div class="banner">${text}</div>` : `<div class="badge ${kind === 'ng' ? 'ng' : ''}">${text}</div>`);
@@ -587,7 +597,7 @@ async function records() {
     <div><div class="instr" style="font-size:18px">右脳能力チェック（最近10回）</div><table class="rank"><tr><th>日付</th><th>合計</th><th>ランク</th></tr>${cs.map(c => `<tr><td>${c.date}</td><td>${c.total}</td><td>${c.grade}</td></tr>`).join('') || '<tr><td colspan="3">まだ記録がありません</td></tr>'}</table></div>
     <div><div class="instr" style="font-size:18px">トレーニング1位</div><table class="rank"><tr><th>ゲーム</th><th>なまえ</th><th>点数</th></tr>${GAMES.map(g => { const t = DB.ranking(g.id)[0]; return `<tr><td>${g.name}</td><td>${t ? esc(t.name) : '-'}</td><td>${t ? t.score : '-'}</td></tr>`; }).join('')}</table></div></div>
     <div class="row"><button class="btn alt" id="home">タイトルへ</button><button class="btn small gray" id="clear">記録を全部消す</button></div>`);
-  await new Promise(r => { stage.querySelector('#home').onclick = r; stage.querySelector('#clear').onclick = () => { if (confirm('保存した記録をすべて消します。よろしいですか？')) { DB.save({}); r(); } }; });
+  await new Promise(r => { stage.querySelector('#home').onclick = r; stage.querySelector('#clear').onclick = async () => { if (await confirmDialog('保存した記録をすべて消します。よろしいですか？')) { DB.save({}); r(); } }; });
 }
 
 title();
