@@ -186,8 +186,16 @@ const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { c
 const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
 const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-function fit() { const s = Math.min(innerWidth / 800, innerHeight / 600, 1.6); stage.style.transform = `scale(${s})`; }
-addEventListener('resize', fit); fit();
+function fit() {
+  // clientWidth/clientHeight track the real visible viewport; on some mobile browsers
+  // window.innerWidth can report a stale/wider value while content is scaling, which
+  // used to clip the game off both edges of the screen.
+  const w = document.documentElement.clientWidth || innerWidth, h = document.documentElement.clientHeight || innerHeight;
+  const s = Math.min(w / 800, h / 600, 1.6); stage.style.transform = `scale(${s})`;
+}
+addEventListener('resize', fit); addEventListener('orientationchange', fit);
+if (window.visualViewport) visualViewport.addEventListener('resize', fit);
+fit();
 
 /* ========= sound (tiny synth, no assets) ========= */
 const SND = { on: true, ctx: null,
